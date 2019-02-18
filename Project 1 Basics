@@ -1,0 +1,59 @@
+.data 
+enter : .asciiz "enter an integers a b c and d respectively : \n"
+b: .asciiz "\n
+c: .asciiz "\n
+d: .asciiz "\n
+nop: .asciiz " n b is less than a " 
+
+.text 
+
+li $v0, 4           	##load immediate of a string ( $V0 4 is for strings)  
+la $a0, enter	    	##load the string in adress $a0
+syscall 		##perform the i/o function  
+
+li $v0, 5		##to read the integer entered by the user 
+syscall 		##to set the input in $v0
+move $s0, $v0		## move the value stored in V0 to S0
+
+## now add b,and c 
+li $v0, 4		##enter the second number b 		
+la $a0, b		## ( asks the used to enter the #) 	
+syscall 		##perform the I/O
+
+li $v0, 5		##read the integer entered	
+syscall 
+move $s1, $v0		##move the value in $v0 to $s1
+			## always displyat the value first then move it 
+
+li $v0, 4
+la $a0, c		## c is entered 
+syscall 
+ 
+li $v0, 5		##read the value eneterd in C
+syscall 
+move $s2, $v0
+
+## add a and b 
+add $t0, $s0, $s1
+
+##print t0
+li $v0, 1		##print an integer 
+move $a0, $t0		##load $a0 with T0 to print 
+syscall 		##perform i/o function 
+
+## if ( a<b) && (b<c) => true ( h=c-(a+b() /false "b is less than a ) 
+slt $t1, $s0, $s1	##if a is less then b  
+beq $t1, $zero, else 	##if (a<b)!= 0 do else 
+slt $t3, $s1,$s2  
+beq $t3, $zero, else	##if (b<c)!=0 do else
+j done  # jump to done
+
+else: sub $t2,$s2,$t0
+done:
+
+li $v0, 1
+move $a0, $t2
+syscall 
+
+li $v0, 10
+syscall 
