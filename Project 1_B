@@ -1,0 +1,116 @@
+.data
+
+f: .asciiz " Enter two integers f and g : \n"
+g:  .asciiz "\n"
+
+f_ten: .asciiz "\n f_ten: "
+g_ten: .asciiz "\n g_ten: " 
+h_q: .asciiz "\n h_quotient: "
+h_r: .asciiz "\n h_remaider: " 
+i_q: .asciiz "\n i_quotient: "
+i_r: .asciiz "\n i_remaider: " 
+j_r: .asciiz "\n j_remainder: "
+
+
+.text
+#ask user for f
+li $v0, 4
+la $a0, f
+syscall
+#t0=f
+li $v0, 5
+syscall
+move $t0, $v0    
+
+#asks for g 
+li $v0, 4
+la $a0, g
+syscall
+#t1=g
+li $v0, 5
+syscall
+move $t1, $v0
+# f and g are entered
+
+#print f_ten 
+li $v0, 4
+la $a0, f_ten
+ syscall 
+li $v0, 1
+move $a0,$t0
+ syscall
+#print g_ten
+li $v0, 4
+la $a0, g_ten
+ syscall 
+li $v0, 1
+move $a0,$t1
+syscall
+#################################
+# h=f/g ( loops) 
+add $t8, $t0, 0
+
+loop1: 
+bgt $t1, $t8, exit1                                                                           
+sub $t8, $t8, $t1
+add $s0, $s0, 1
+j loop1 
+exit1:
+#print h_quotient 
+li $v0, 4
+la $a0, h_q
+ syscall
+li $v0, 1
+move $a0, $s0
+ syscall
+#print h_remainder 
+li $v0, 4
+la $a0, h_r
+ syscall
+li $v0, 1
+move $a0, $t8
+ syscall
+
+
+############################
+# i=(f+g)/h_quotient
+add $t2, $t0, $t1
+
+loop2:
+bgt $s0, $t2, exit2
+sub $t2, $t2, $s0 # h qotient is in S0
+add $s1, $s1, 1
+j loop2 
+exit2:
+
+#print i_quotient 
+li $v0, 4
+la $a0, i_q
+ syscall
+li $v0, 1
+move $a0, $s1
+ syscall
+#print i_remainder 
+li $v0, 4
+la $a0, i_r
+ syscall
+li $v0, 1
+move $a0, $t2
+ syscall
+#####################
+sub $t3, $t0, $t1
+loop3:
+bgt $s1, $t3, exit3
+sub $t3, $t3, $s1
+add $s2, $s2, 1
+j loop3
+exit3:
+#print j_remainder 
+li $v0, 4
+la $a0, j_r
+ syscall
+li $v0, 1
+move $a0, $t3
+ syscall
+
+
