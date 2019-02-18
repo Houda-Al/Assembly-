@@ -1,0 +1,151 @@
+
+.data 
+
+A: .asciiz " Enter integers A, B, C, D: \n"
+B:  .asciiz "\n"
+C:  .asciiz "\n"
+D: .asciiz "\n"
+f: .asciiz "\n f_ten: "
+g: .asciiz "\n g_ten: " 
+
+f1: .asciiz "\n f_two:  "
+g1: .asciiz "\n g_two: " 
+
+.text
+#ask for integer 
+li $v0, 4
+la $a0, A
+syscall
+#t0=A
+li $v0, 5
+syscall
+move $t0, $v0    
+
+#asks for b 
+li $v0, 4
+la $a0, B
+syscall
+#t1=B
+li $v0, 5
+syscall
+move $t1, $v0
+
+
+li $v0, 4
+la $a0, C
+syscall
+#t2=C  
+li $v0, 5
+syscall
+move $t2, $v0
+
+
+li $v0, 4
+la $a0, D
+syscall
+#t3=D
+li $v0, 5
+syscall
+move $t3, $v0
+
+### all numbers are enetered
+### t0(A) ,1(B),2(C),3(D) are full 
+### t4= A*A
+### t5=(B*D)
+### T6= t4-t5
+## Loop for A*A
+
+#A*A
+loop: 
+bge $s4, $t0, exit 
+add $s0, $s0, $t0
+add $s4, $s4, 1
+j loop
+ exit: 
+ 
+#print A*A
+#li $v0, 1
+#move $a0, $s0
+#syscall
+
+################
+
+
+# B*D
+loop1: 
+bge $s5, $t1, exit1
+add $s1, $s1, $t3
+add $s5, $s5, 1
+j loop1 
+exit1:
+ 
+#print B*D
+#li $v0, 1
+#move $a0, $s1
+#syscall
+
+
+# A*D
+loop2:
+bge $s6, $t0, exit2
+add $s2, $s2, $t3
+add $s6, $s6, 1
+j loop2
+exit2:
+
+#print a*D
+#li $v0, 1
+#move $a0, $s2
+#syscall
+
+# 6*C
+loop3:
+bge $s7, 6, exit3
+add $s3, $s3, $t2
+add $s7, $s7, 1
+j loop3
+exit3:
+
+#print 6C
+#li $v0, 1
+#move $a0, $s3
+#syscall
+
+##add AA-BD
+sub $t8, $s0, $s1
+##add AD+6C
+add $t9, $s2, $s3
+#display f decimal 
+li $v0, 4
+la $a0, f
+ syscall 
+ 
+li $v0, 1
+move $a0,$t8
+syscall
+#print g decimal 
+li $v0, 4
+la $a0, g
+ syscall 
+ 
+li $v0, 1
+move $a0,$t9
+syscall
+
+#display f binary
+li $v0, 4
+la $a0, f1
+ syscall 
+ 
+li $v0, 35
+move $a0,$t8
+syscall
+#print g binary
+li $v0, 4
+la $a0, g
+ syscall 
+ 
+li $v0, 35
+move $a0,$t9
+syscall
+
